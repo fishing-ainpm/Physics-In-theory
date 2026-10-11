@@ -1,8 +1,8 @@
 <%- include('partials/head', {
-  extraHead: '<link rel="stylesheet" href="/vendor/katex/katex.min.css">'
+  extraHead: '<link rel="stylesheet" href="' + root + 'vendor/katex/katex.min.css">'
 }) %>
 
-<nav class="crumbs"><a href="/">Library</a> <span>/</span> <%= sim.category %></nav>
+<nav class="crumbs"><a href="../index.html">Library</a> <span>/</span> <%= sim.category %></nav>
 
 <div class="sim-heading">
   <h1><%= sim.title %></h1>
@@ -53,22 +53,22 @@
     <div class="prose"><%- theory %></div>
   <% } else { %>
     <div class="theory-placeholder">
-      Theory for this simulation hasn't been written yet.
-      Add it in <code>content/theory/<%= sim.slug %>.md</code>.
+      <%# Write the theory in content/theory/<slug>.md, then rebuild. %>
+      The theory for this simulation is coming soon.
     </div>
   <% } %>
 </section>
 
 <nav class="sim-pager">
-  <% if (prev) { %><a href="/sim/<%= prev.slug %>">← <%= prev.title %></a><% } else { %><span></span><% } %>
-  <% if (nextSim) { %><a href="/sim/<%= nextSim.slug %>"><%= nextSim.title %> →</a><% } %>
+  <% if (prev) { %><a href="<%= prev.slug %>.html">← <%= prev.title %></a><% } else { %><span></span><% } %>
+  <% if (nextSim) { %><a href="<%= nextSim.slug %>.html"><%= nextSim.title %> →</a><% } %>
 </nav>
 
-<script src="/vendor/p5/p5.min.js"></script>
-<script src="/js/hub.js"></script>
-<script src="/sims/<%= sim.slug %>.js"></script>
-<script defer src="/vendor/katex/katex.min.js"></script>
-<script defer src="/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../vendor/p5/p5.min.js"></script>
+<script src="../js/hub.js"></script>
+<script src="../sims/<%= sim.slug %>.js"></script>
+<script defer src="../vendor/katex/katex.min.js"></script>
+<script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     const el = document.querySelector('.prose');

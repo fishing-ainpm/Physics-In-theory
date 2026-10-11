@@ -1,0 +1,13 @@
+{
+  "appId": "io.github.fishingainpm.physicsintheory",
+  "appName": "Physics in Theory",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#f2f2f1"
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "LIGHT"
+    }
+  }
+}

@@ -1,6 +1,8 @@
 # Physics in Theory
 
-A small library of interactive physics simulations that run in the browser. It's built with [p5.js](https://p5js.org) and served by Node and Express.
+An Android app with a small library of interactive physics simulations. The simulations are written with [p5.js](https://p5js.org), rendered into a static offline site, and packaged as an APK with [Capacitor](https://capacitorjs.com).
+
+**Download:** get the latest APK from the [Releases page](https://github.com/fishing-ainpm/Physics-In-theory/releases). Open it on your phone and allow installing from that source. It needs Android 7.0 or newer and works offline.
 
 | Simulation | What you can change | Plot |
 | --- | --- | --- |
@@ -11,24 +13,45 @@ A small library of interactive physics simulations that run in the browser. It's
 | Orbital Motion | distance, launch speed and direction, planet mass | distance, energy |
 | Wave Interference | wavelength, separation, phase, frequency, wave or intensity view | displacement at a draggable probe |
 
-## Running it
+## Building
 
 ```bash
 npm install
-npm start        # http://localhost:3000
-npm run dev      # restarts when server files change
-npm test         # smoke tests
+npm run preview        # build www/ and view it at http://localhost:3000 in a desktop browser
+npm test               # build + link checks
+npm run android:apk    # build the release APK (needs JDK 21 and the Android SDK)
 ```
 
-You need Node 18 or newer. p5.js and KaTeX are served from `node_modules`, so the site works without internet access.
+The APK ends up in `android/app/build/outputs/apk/release/`. You can also open `android/` in Android Studio after `npm run android:sync`.
+
+### Releases
+
+`.github/workflows/android-release.yml` builds the APK on GitHub and publishes it as a release. It runs in two cases:
+
+- when you push a version tag: `git tag v1.1.0 && git push origin v1.1.0`
+- when you run **Android release** from the Actions tab and enter a version.
+
+**Signing.** Without these secrets, the release is signed with a throwaway debug key. Android then refuses to install the next version over it, so users must uninstall first. Create one key and keep it safe:
+
+```bash
+keytool -genkeypair -v -keystore release.jks -alias physics -keyalg RSA -keysize 2048 -validity 10000
+base64 -w0 release.jks   # paste the output into the ANDROID_KEYSTORE_BASE64 secret
+```
+
+Then add these repository secrets (Settings → Secrets and variables → Actions): `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` and `ANDROID_KEY_PASSWORD`.
 
 ## Project layout
 
 ```
-server.js                 Express app (routes: /, /sim/:slug)
+scripts/build.js          Renders the templates into the static app in www/
+scripts/preview.js        Tiny static server for testing www/ on a desktop
+scripts/make-icons.py     Regenerates the Android launcher icons and splash screens
+android/                  Capacitor Android project
+capacitor.config.json     App id, name and native settings
 src/simulations.js        The registry: one entry per simulation
 src/theory.js             Loads content/theory/<slug>.md and renders it as Markdown
-views/                    EJS templates (home, simulation page, 404)
+views/                    EJS templates (home and simulation page)
+public/                   Copied into www/ as-is
 public/js/hub.js          Shared runtime: controls, play/pause, fixed timestep, plot
 public/sims/<slug>.js     One file per simulation
 public/img/thumbs/        Card thumbnails (<slug>.svg, optional)
@@ -38,7 +61,7 @@ content/theory/           Theory text shown under each simulation
 
 ## Adding the physics theory
 
-Create `content/theory/<slug>.md`, for example `content/theory/pendulum.md`. It shows up in the "The physics" section under that simulation. Until the file exists, the page shows a placeholder.
+Create `content/theory/<slug>.md`, for example `content/theory/pendulum.md`, then rebuild. It shows up in the "The physics" section under that simulation. Until the file exists, the page shows a placeholder.
 
 You can use normal Markdown. Write maths with `$...$` for inline equations and `$$...$$` for display equations. KaTeX renders both. Start from `content/theory/_template.md`. Files whose names start with `_` are never shown on the site.
 
@@ -84,7 +107,7 @@ You can use normal Markdown. Write maths with `$...$` for inline equations and `
 
 3. (Optional) Add `public/img/thumbs/free-fall.svg` (320×180) and `content/theory/free-fall.md`.
 
-That's all. The home page card, the controls panel, play/pause/step/reset, the speed selector and the plot are built for you.
+Rebuild with `npm run android:sync` (or `npm run preview`). The home page card, the controls panel, play/pause/step/reset, the speed selector and the plot are built for you.
 
 ### `PhysicsHub.define` options
 

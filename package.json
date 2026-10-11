@@ -1,11 +1,13 @@
 {
   "name": "physics-in-theory",
   "version": "1.0.0",
-  "description": "A small library of interactive physics simulations built with p5.js and Express.",
-  "main": "server.js",
+  "description": "A library of interactive physics simulations (p5.js), packaged as an Android app with Capacitor.",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
+    "build": "node scripts/build.js",
+    "preview": "npm run build && node scripts/preview.js",
+    "android:sync": "npm run build && cap sync android",
+    "android:apk": "npm run android:sync && cd android && ./gradlew assembleRelease",
+    "android:debug": "npm run android:sync && cd android && ./gradlew assembleDebug",
     "test": "node --test"
   },
   "repository": {
@@ -17,14 +19,19 @@
   },
   "homepage": "https://github.com/fishing-ainpm/Physics-In-theory#readme",
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
     "ejs": "^7.0.1",
-    "express": "^5.3.0",
     "katex": "^0.19.0",
     "marked": "^18.1.0",
     "p5": "^2.3.4"
   },
   "private": true,
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3"
   }
 }

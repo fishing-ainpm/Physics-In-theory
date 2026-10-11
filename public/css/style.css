@@ -21,7 +21,13 @@
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+
+/* Android edge-to-edge: Capacitor injects --safe-area-inset-* for the system bars. */
+:root {
+  --inset-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --inset-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+}
 
 body {
   margin: 0;
@@ -45,14 +51,14 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--surface-2);
 .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
 
 /* Header / footer */
-.site-header { background: var(--surface); border-bottom: 1px solid var(--border); }
+.site-header { background: var(--surface); border-bottom: 1px solid var(--border); padding-top: var(--inset-top); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 56px; }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 600; letter-spacing: -0.01em; }
 .brand:hover { text-decoration: none; }
 .brand-mark { width: 26px; height: 26px; fill: none; stroke: var(--ink); stroke-width: 1.4; }
 .brand-mark circle { fill: var(--ink); stroke: none; }
 .site-nav a { color: var(--text-muted); font-size: 14px; }
-.site-footer { color: var(--text-faint); font-size: 13px; padding: 28px 0; margin-top: 48px; border-top: 1px solid var(--border); }
+.site-footer { color: var(--text-faint); font-size: 13px; padding: 28px 0 calc(28px + var(--inset-bottom)); margin-top: 48px; border-top: 1px solid var(--border); }
 .site-footer a { color: inherit; text-decoration: underline; }
 
 /* Home */
@@ -100,7 +106,7 @@ code { font-family: var(--mono); font-size: 0.9em; background: var(--surface-2);
 
 .sim-stage, .sim-controls, .theory { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
 .sim-stage { padding: 12px; min-width: 0; }
-.canvas-box { border-radius: 6px; overflow: hidden; background: var(--canvas); line-height: 0; }
+.canvas-box { border-radius: 6px; overflow: hidden; background: var(--canvas); line-height: 0; user-select: none; -webkit-user-select: none; }
 .canvas-box canvas, .plot-box canvas { display: block; max-width: 100%; touch-action: none; }
 
 .transport { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 2px 2px; }
