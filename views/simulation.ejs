@@ -1,0 +1,86 @@
+<%- include('partials/head', {
+  extraHead: '<link rel="stylesheet" href="/vendor/katex/katex.min.css">'
+}) %>
+
+<nav class="crumbs"><a href="/">Library</a> <span>/</span> <%= sim.category %></nav>
+
+<div class="sim-heading">
+  <h1><%= sim.title %></h1>
+  <p><%= sim.summary %></p>
+</div>
+
+<div class="sim-layout">
+  <section class="sim-stage" aria-label="Simulation">
+    <div class="canvas-box" id="sim-canvas"></div>
+
+    <div class="transport">
+      <button class="btn" id="btn-play" aria-label="Pause">Pause</button>
+      <button class="btn" id="btn-step" title="Advance one frame">Step</button>
+      <button class="btn" id="btn-reset">Reset</button>
+      <label class="speed">Speed
+        <select id="speed">
+          <option value="0.25">0.25×</option>
+          <option value="0.5">0.5×</option>
+          <option value="1" selected>1×</option>
+          <option value="2">2×</option>
+        </select>
+      </label>
+      <span class="readout" id="time-readout">t = 0.00 s</span>
+    </div>
+
+    <div class="plot-panel" id="plot-panel" hidden>
+      <div class="plot-head">
+        <span class="plot-title"><span id="plot-title"></span><select id="plot-view" aria-label="Plot" hidden></select></span>
+        <span class="plot-legend" id="plot-legend"></span>
+      </div>
+      <div class="plot-box" id="plot-canvas"></div>
+    </div>
+  </section>
+
+  <aside class="sim-controls" aria-label="Controls">
+    <h2>Parameters</h2>
+    <form id="controls" onsubmit="return false"></form>
+    <div class="readouts" id="readouts"></div>
+    <label class="toggle" id="plot-toggle-row" hidden>
+      <input type="checkbox" id="plot-toggle" checked> Show plot
+    </label>
+  </aside>
+</div>
+
+<section class="theory" aria-labelledby="theory-heading">
+  <h2 id="theory-heading">The physics</h2>
+  <% if (theory) { %>
+    <div class="prose"><%- theory %></div>
+  <% } else { %>
+    <div class="theory-placeholder">
+      Theory for this simulation hasn't been written yet.
+      Add it in <code>content/theory/<%= sim.slug %>.md</code>.
+    </div>
+  <% } %>
+</section>
+
+<nav class="sim-pager">
+  <% if (prev) { %><a href="/sim/<%= prev.slug %>">← <%= prev.title %></a><% } else { %><span></span><% } %>
+  <% if (nextSim) { %><a href="/sim/<%= nextSim.slug %>"><%= nextSim.title %> →</a><% } %>
+</nav>
+
+<script src="/vendor/p5/p5.min.js"></script>
+<script src="/js/hub.js"></script>
+<script src="/sims/<%= sim.slug %>.js"></script>
+<script defer src="/vendor/katex/katex.min.js"></script>
+<script defer src="/vendor/katex/contrib/auto-render.min.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const el = document.querySelector('.prose');
+    if (el && window.renderMathInElement) {
+      renderMathInElement(el, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+        throwOnError: false,
+      });
+    }
+  });
+</script>
+<%- include('partials/foot') %>

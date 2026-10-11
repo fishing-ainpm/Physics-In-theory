@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> · Physics in Theory</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <% if (typeof extraHead !== 'undefined') { %><%- extraHead %><% } %>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16" r="3.2" />
+          <ellipse cx="16" cy="16" rx="13" ry="5.5" />
+          <ellipse cx="16" cy="16" rx="13" ry="5.5" transform="rotate(60 16 16)" />
+          <ellipse cx="16" cy="16" rx="13" ry="5.5" transform="rotate(-60 16 16)" />
+        </svg>
+        <span>Physics in Theory</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/">Library</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">

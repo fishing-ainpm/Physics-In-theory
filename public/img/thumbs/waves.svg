@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><rect width="320" height="180" fill="#f8f8f7"/><g fill="none" stroke="#4a6f8a" stroke-opacity=".55" stroke-width="5">
+<circle cx="50" cy="65" r="22"/><circle cx="50" cy="65" r="52"/><circle cx="50" cy="65" r="82"/><circle cx="50" cy="65" r="112"/><circle cx="50" cy="65" r="142"/><circle cx="50" cy="65" r="172"/><circle cx="50" cy="65" r="202"/><circle cx="50" cy="65" r="232"/><circle cx="50" cy="65" r="262"/></g>
+<g fill="none" stroke="#3a3a3a" stroke-opacity=".28" stroke-width="5">
+<circle cx="50" cy="115" r="22"/><circle cx="50" cy="115" r="52"/><circle cx="50" cy="115" r="82"/><circle cx="50" cy="115" r="112"/><circle cx="50" cy="115" r="142"/><circle cx="50" cy="115" r="172"/><circle cx="50" cy="115" r="202"/><circle cx="50" cy="115" r="232"/><circle cx="50" cy="115" r="262"/></g>
+<circle cx="50" cy="65" r="6" fill="#3a3a3a" stroke="#fff" stroke-width="2"/><circle cx="50" cy="115" r="6" fill="#3a3a3a" stroke="#fff" stroke-width="2"/>
+</svg>

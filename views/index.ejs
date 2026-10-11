@@ -1,0 +1,41 @@
+<%- include('partials/head') %>
+
+<section class="hero">
+  <h1>Simulation Library</h1>
+  <p>Pick a simulation, change the parameters, and watch the physics respond. Every demo runs live in your browser.</p>
+</section>
+
+<section class="library">
+  <div class="library-tools">
+    <input id="search" class="search" type="search" placeholder="Search simulations…" aria-label="Search simulations">
+    <div class="chips" role="group" aria-label="Filter by category">
+      <button class="chip is-active" data-category="all">All</button>
+      <% categories.forEach((c) => { %>
+        <button class="chip" data-category="<%= c %>"><%= c %></button>
+      <% }) %>
+    </div>
+  </div>
+
+  <ul class="card-grid" id="sim-list">
+    <% simulations.forEach((sim) => { %>
+      <li class="card" data-category="<%= sim.category %>"
+          data-search="<%= [sim.title, sim.summary, sim.category, ...sim.tags].join(' ').toLowerCase() %>">
+        <a href="/sim/<%= sim.slug %>">
+          <div class="card-thumb"><img src="/img/thumbs/<%= sim.slug %>.svg" alt="" loading="lazy" onerror="this.remove()"></div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span><%= sim.category %></span>
+              <span class="level level-<%= sim.level.toLowerCase() %>"><%= sim.level %></span>
+            </div>
+            <h2><%= sim.title %></h2>
+            <p><%= sim.summary %></p>
+          </div>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+  <p class="empty" id="empty" hidden>No simulations match that search.</p>
+</section>
+
+<script src="/js/library.js"></script>
+<%- include('partials/foot') %>

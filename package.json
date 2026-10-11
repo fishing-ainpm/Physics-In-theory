@@ -1,0 +1,30 @@
+{
+  "name": "physics-in-theory",
+  "version": "1.0.0",
+  "description": "A small library of interactive physics simulations built with p5.js and Express.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fishing-ainpm/Physics-In-theory.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fishing-ainpm/Physics-In-theory/issues"
+  },
+  "homepage": "https://github.com/fishing-ainpm/Physics-In-theory#readme",
+  "dependencies": {
+    "ejs": "^7.0.1",
+    "express": "^5.3.0",
+    "katex": "^0.19.0",
+    "marked": "^18.1.0",
+    "p5": "^2.3.4"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}
