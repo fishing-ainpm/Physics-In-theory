@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16181c"/><stop offset=".75" stop-color="#5b6a76"/><stop offset="1" stop-color="#dbe6ee"/></linearGradient></defs>
+<rect width="320" height="180" fill="url(#s)"/>
+<g fill="#fff"><circle cx="40" cy="25" r="1.2"/><circle cx="90" cy="60" r="1"/><circle cx="250" cy="30" r="1.4"/><circle cx="290" cy="80" r="1"/><circle cx="200" cy="15" r="1"/><circle cx="60" cy="95" r=".8"/><circle cx="130" cy="20" r="1.1"/></g>
+<ellipse cx="160" cy="430" rx="420" ry="270" fill="#b9b8b4"/>
+<g transform="translate(160 100) rotate(0)"><path d="M-6 6l6 26 6-26z" fill="#e9a23b"/><path d="M-3 6l3 13 3-13z" fill="#f6e08a"/>
+<rect x="-7" y="-36" width="14" height="42" rx="2" fill="#e8e8e6"/><path d="M-7 -36h14l-7-15z" fill="#b0644a"/><path d="M-7 -6l-8 12h8zM7 -6l8 12h-8z" fill="#3a3a3a"/><circle cy="-24" r="3" fill="#4a6f8a"/></g>
+<text x="16" y="28" font-family="ui-monospace,monospace" font-size="12" fill="#cfd6db">Δv = vₑ ln(m₀/m)</text>
+</svg>

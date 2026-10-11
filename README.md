@@ -2,10 +2,14 @@
 
 An Android app with a small library of interactive physics simulations. The simulations are written with [p5.js](https://p5js.org), rendered into a static offline site, and packaged as an APK with [Capacitor](https://capacitorjs.com).
 
+The app runs in landscape: the simulation is on the left and the controls are on the right.
+
 **Download:** get the latest APK from the [Releases page](https://github.com/fishing-ainpm/Physics-In-theory/releases). Open it on your phone and allow installing from that source. It needs Android 7.0 or newer and works offline.
 
 | Simulation | What you can change | Plot |
 | --- | --- | --- |
+| Physics Sandbox | place balls, boxes, triangles and planks (tap, or drag to slingshot them), draw walls and ramps, grab and throw, erase; gravity, bounciness, friction, air | kinetic, potential and total energy |
+| Rocket Launch | launch body (Earth, Mars, Moon), dry and fuel mass, Isp, thrust, drag, time warp. A **Calculations** panel works through the rocket equation with your numbers, live. | altitude, speed vs escape speed, g-force |
 | Projectile Motion | speed, angle, height, gravity, air resistance | height, velocity |
 | Simple Pendulum | length, release angle (or drag the bob), gravity, damping | angle (exact vs small-angle), energy |
 | Mass on a Spring | mass, k, damping, start position (or drag), driving force | position, energy |
@@ -105,6 +109,8 @@ You can use normal Markdown. Write maths with `$...$` for inline equations and `
    })();
    ```
 
+   If the sketch needs another library, copy it into `www/vendor/` in `scripts/build.js` and list it in the registry entry as `scripts: ['vendor/…']` (the sandbox does this for Matter.js).
+
 3. (Optional) Add `public/img/thumbs/free-fall.svg` (320×180) and `content/theory/free-fall.md`.
 
 Rebuild with `npm run android:sync` (or `npm run preview`). The home page card, the controls panel, play/pause/step/reset, the speed selector and the plot are built for you.
@@ -121,6 +127,8 @@ Rebuild with `npm run android:sync` (or `npm run preview`). The home page card, 
 | `aspect` | Canvas width / height. The default is `16/10`. The canvas resizes with the page, so draw relative to `p.width` and `p.height`. |
 | `plot` | One plot config, or an array of them, which adds a dropdown to switch views. Each has `title`, `series: [{label, color, dashed?}]`, `sample(state, params) → [values]`, and optionally `window` (seconds of rolling history), `yRange` (`[min, max]` or a function), `includeZero`, `minDuration`, `yLabel`, and `visible: false` to start hidden. Return `NaN` to leave a gap. |
 | `sampleEvery` | Plot sample spacing in seconds. The default is `1/30`. |
+| `calculations(params, state)` | Adds a **Calculations** panel. Return rows: `{ label, tex, value }` (a step with a TeX formula), `{ heading }`, or `{ note, tone: 'good' \| 'bad' }`. It refreshes when parameters change and 4× a second while running. |
+| `clock(state)` | Overrides the time shown and used on plots (the rocket uses mission time with time warp). |
 | `readouts` + `measure(state, params)` | `readouts: [{id, label}]` lists the live values shown under the controls. `measure` returns `{id: 'text'}`. |
 | `onChange(id, state, params, api)` | Called when a control without `reset` changes. |
 | `pointer: { hover, down, drag, up }` | Mouse and touch interaction in canvas pixels. If `down` returns true, a drag starts, and physics pauses until it ends. `hover` returning true shows a grab cursor. |

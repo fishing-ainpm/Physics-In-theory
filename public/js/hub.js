@@ -197,7 +197,7 @@
    * `views` is one or more plot definitions. Every view is sampled all the time,
    * so switching between them in the dropdown shows the full history.
    */
-  function createPlot(views, getSim) {
+  function createPlot(views, getSim, clock) {
     const panel = $('#plot-panel');
     const toggle = $('#plot-toggle');
     const picker = $('#plot-view');
@@ -244,7 +244,8 @@
       views.forEach((v, i) => {
         const d = store[i];
         const values = v.sample(state, params);
-        d.t.push(state.t);
+        const now = clock(state);
+        d.t.push(now);
         values.forEach((y, k) => {
           d.ys[k].push(y);
           if (Number.isFinite(y)) {
@@ -254,7 +255,7 @@
         });
         if (v.window) {
           let drop = 0;
-          while (drop < d.t.length && d.t[drop] < state.t - v.window) drop++;
+          while (drop < d.t.length && d.t[drop] < now - v.window) drop++;
           if (drop) trim(d, drop);
         }
         if (d.t.length > 4000) trim(d, d.t.length - 4000); // keep long runs cheap
@@ -390,6 +391,58 @@
     return { clear, push, redraw };
   }
 
+  // ---------------------------------------------------------------- calculations panel
+  /**
+   * def.calculations(params, state) returns rows of
+   *   { label, tex, value }  - a worked step: description, formula (TeX) and result
+   *   { heading }            - a sub-heading
+   *   { note, tone }         - a sentence; tone 'good' | 'bad' highlights it
+   * The panel refreshes on every parameter change and a few times a second while running.
+   */
+  function createCalcPanel(def, getSim) {
+    const panel = $('#calc-panel');
+    const body = $('#calc-body');
+    panel.hidden = false;
+    let last = 0;
+    let lastHtml = '';
+
+    const tex = (src) => {
+      if (!window.katex) return `<code>${src}</code>`;
+      try {
+        return katex.renderToString(src, { throwOnError: false });
+      } catch {
+        return `<code>${src}</code>`;
+      }
+    };
+
+    function refresh() {
+      const sim = getSim();
+      const rows = def.calculations(sim.params, sim.state) || [];
+      const html = rows.map((r) => {
+        if (r.heading) return `<h3>${r.heading}</h3>`;
+        if (r.note) return `<p class="calc-note ${r.tone ? 'calc-' + r.tone : ''}">${r.note}</p>`;
+        return `<div class="calc-row"><span class="calc-label">${r.label}</span>` +
+          `<span class="calc-tex">${r.tex ? tex(r.tex) : ''}</span>` +
+          `<b class="calc-value">${r.value ?? ''}</b></div>`;
+      }).join('');
+      if (html !== lastHtml) {
+        body.innerHTML = html;
+        lastHtml = html;
+      }
+    }
+
+    return {
+      refresh,
+      tick() {
+        const now = performance.now();
+        if (now - last > 250) {
+          last = now;
+          refresh();
+        }
+      },
+    };
+  }
+
   // ---------------------------------------------------------------- main
   function define(def) {
     const params = {};
@@ -416,6 +469,7 @@
         plot.clear();
         sample();
       }
+      calc?.refresh();
       redrawIfPaused();
     }
 
@@ -451,6 +505,7 @@
         setters[id]?.(value);
         if (ctrl?.reset) reset();
         else def.onChange?.(id, sim.state, params, api);
+        calc?.refresh();
         redrawIfPaused();
       },
       reset,
@@ -492,6 +547,9 @@
     });
 
     const timeReadout = $('#time-readout');
+    // Simulations can show their own clock (e.g. mission time with time warp).
+    const clock = def.clock || ((state) => state.t);
+    const calc = def.calculations ? createCalcPanel(def, () => sim) : null;
     const box = $('#sim-canvas');
     const aspect = def.aspect || 16 / 10;
 
@@ -499,13 +557,16 @@
       p5ref = p;
       const size = () => {
         const w = box.clientWidth;
-        const h = Math.max(260, Math.min(w / aspect, window.innerHeight * 0.68));
+        // On short (landscape phone) screens, keep the canvas and the play buttons above the fold.
+        const vh = window.innerHeight;
+        const maxH = vh < 600 ? vh - 175 : vh * 0.68;
+        const h = Math.max(vh < 600 ? 180 : 260, Math.min(w / aspect, maxH));
         return [w, Math.round(h)];
       };
 
       p.setup = () => {
         p.createCanvas(...size());
-        if (plotViews.length) plot = createPlot(plotViews, () => sim);
+        if (plotViews.length) plot = createPlot(plotViews, () => sim, clock);
         reset();
         new ResizeObserver(() => {
           const [w, h] = size();
@@ -523,7 +584,8 @@
         if (sim.playing && !sim.dragging) advance(Math.min(p.deltaTime / 1000, 0.1) * sim.speed);
         def.draw(p, sim.state, params, theme);
 
-        timeReadout.textContent = `t = ${sim.state.t.toFixed(2)} s`;
+        timeReadout.textContent = `t = ${clock(sim.state).toFixed(2)} s`;
+        calc?.tick();
         if (def.measure) {
           const vals = def.measure(sim.state, params);
           for (const id in readoutCells) readoutCells[id].textContent = vals[id] ?? '–';

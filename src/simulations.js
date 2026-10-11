@@ -13,8 +13,26 @@
  *   category  Used to group and filter on the home page.
  *   level     'Intro' | 'Intermediate' | 'Advanced'.
  *   tags      Short keywords, searchable on the home page.
+ *   scripts   Optional extra libraries the sketch needs, relative to the site root.
  */
 const SIMULATIONS = [
+  {
+    slug: 'sandbox',
+    title: 'Physics Sandbox',
+    summary: 'Place balls, boxes and planks, draw your own ramps and walls, then throw things around and watch them collide.',
+    category: 'Sandbox',
+    level: 'Intro',
+    tags: ['draw', 'build', 'collisions', 'gravity', 'friction', 'rigid body'],
+    scripts: ['vendor/matter/matter.min.js'],
+  },
+  {
+    slug: 'rocket',
+    title: 'Rocket Launch',
+    summary: 'Design a rocket, launch it from Earth, Mars or the Moon, and follow the rocket equation step by step as it flies.',
+    category: 'Space',
+    level: 'Intermediate',
+    tags: ['tsiolkovsky', 'delta-v', 'thrust', 'escape velocity', 'orbit', 'calculator'],
+  },
   {
     slug: 'projectile',
     title: 'Projectile Motion',

@@ -25,6 +25,7 @@ async function build() {
 
   // Front-end libraries, bundled so the app works offline.
   fs.cpSync(path.join(ROOT, 'node_modules/p5/lib/p5.min.js'), path.join(OUT, 'vendor/p5/p5.min.js'));
+  fs.cpSync(path.join(ROOT, 'node_modules/matter-js/build/matter.min.js'), path.join(OUT, 'vendor/matter/matter.min.js'));
   const katex = path.join(ROOT, 'node_modules/katex/dist');
   fs.cpSync(path.join(katex, 'katex.min.css'), path.join(OUT, 'vendor/katex/katex.min.css'));
   fs.cpSync(path.join(katex, 'katex.min.js'), path.join(OUT, 'vendor/katex/katex.min.js'));
