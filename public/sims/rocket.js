@@ -309,6 +309,49 @@
     },
   });
 
+  // ---------------------------------------------------------- "Your calculation" panel
+  // Values a student can pull into their own formula (all SI units).
+  function links() {
+    const { params } = PhysicsHub.sim;
+    const d = design(params);
+    const s = PhysicsHub.sim.state || { h: 0, v: 0, m: d.m0 }; // before the first frame
+    return [
+      { id: 'm0', label: 'Launch mass', value: d.m0, unit: 'kg', compare: true },
+      { id: 'dry', label: 'Dry mass', value: d.dry, unit: 'kg', compare: true },
+      { id: 'fuel', label: 'Fuel mass', value: d.fuel, unit: 'kg', compare: true },
+      { id: 'isp', label: 'Isp', value: params.isp, unit: 's' },
+      { id: 'g0', label: 'Standard gravity g₀', value: G0, unit: 'm/s²' },
+      { id: 've', label: 'Exhaust speed', value: d.ve, unit: 'm/s', compare: true },
+      { id: 'F', label: 'Thrust', value: d.F, unit: 'N', compare: true },
+      { id: 'mdot', label: 'Fuel burned per second', value: d.mdot, unit: 'kg/s', compare: true },
+      { id: 'tb', label: 'Burn time', value: d.tb, unit: 's', compare: true },
+      { id: 'dv', label: 'Ideal Δv', value: d.dv, unit: 'm/s', compare: true },
+      { id: 'twr', label: 'Thrust-to-weight', value: d.twr, unit: '', compare: true },
+      { id: 'g', label: 'Surface gravity', value: d.g, unit: 'm/s²', compare: true },
+      { id: 'GM', label: 'GM of the planet', value: d.pl.GM, unit: 'm³/s²' },
+      { id: 'R', label: 'Planet radius', value: d.pl.R, unit: 'm' },
+      { id: 'vorb', label: 'Orbital speed', value: d.vOrb, unit: 'm/s', compare: true },
+      { id: 'vesc', label: 'Escape speed', value: d.vEsc, unit: 'm/s', compare: true },
+      { id: 'h', label: 'Altitude now', value: s.h, unit: 'm' },
+      { id: 'v', label: 'Speed now', value: s.v, unit: 'm/s' },
+      { id: 'm', label: 'Mass now', value: s.m, unit: 'kg' },
+    ];
+  }
+
+  PhysicsCalculator.mount({
+    container: '#sim-extra',
+    links,
+    context: () => Object.fromEntries(links().map((l) => [l.label, `${Formula.fmt(l.value)}${l.unit ? ' ' + l.unit : ''}`])
+      .concat([['Launched from', planetOf(PhysicsHub.sim.params).name], ['Flight status', PhysicsHub.sim.state.phase]])),
+    examples: [
+      { label: 'Rocket equation', formula: 'dv = ve * ln(m0 / mf)' },
+      { label: 'Exhaust speed', formula: 've = Isp * g0' },
+      { label: 'Burn time', formula: 'tb = mfuel / (F / ve)' },
+      { label: 'Thrust-to-weight', formula: 'TWR = F / (m0 * g)' },
+      { label: 'Escape speed', formula: 'vesc = sqrt(2 * GM / R)' },
+    ],
+  });
+
   function statusText(s, params) {
     switch (s.phase) {
       case 'pad': return 'On the pad';

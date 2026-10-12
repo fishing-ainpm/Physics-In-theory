@@ -456,6 +456,8 @@
     const sim = { ready: false, playing: def.autoplay !== false, dragging: false, speed: 1, acc: 0, lastSample: -Infinity, params, state: null };
     let plot = null;
     let p5ref = null;
+    // Lets page add-ons (like the calculator) read the live parameters and state.
+    window.PhysicsHub.sim = sim;
 
     const redrawIfPaused = () => {
       if (sim.ready && !sim.playing) p5ref.redraw();

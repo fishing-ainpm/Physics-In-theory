@@ -8,14 +8,20 @@ The app runs in landscape: the simulation is on the left and the controls are on
 
 | Simulation | What you can change | Plot |
 | --- | --- | --- |
-| Physics Sandbox | place balls, boxes, triangles and planks (tap, or drag to slingshot them), draw walls and ramps, grab and throw, erase; gravity, bounciness, friction, air | kinetic, potential and total energy |
-| Rocket Launch | launch body (Earth, Mars, Moon), dry and fuel mass, Isp, thrust, drag, time warp. A **Calculations** panel works through the rocket equation with your numbers, live. | altitude, speed vs escape speed, g-force |
+| Physics Sandbox | draw any shape freehand (concave works too), rectangles, circles, walls and ramps; place, slingshot, grab and throw, pin, erase; ready-made scenarios (dominoes, pyramid, catapult, marble run, plinko) and saving your own; gravity, bounciness, friction, air | kinetic, potential and total energy |
+| Rocket Launch | launch body (Earth, Mars, Moon), dry and fuel mass, Isp, thrust, drag, time warp. A **Calculations** panel works through the rocket equation live, and **Your calculation** lets students write their own formula, explain every symbol, calculate, and ask the AI to interpret it. | altitude, speed vs escape speed, g-force |
 | Projectile Motion | speed, angle, height, gravity, air resistance | height, velocity |
 | Simple Pendulum | length, release angle (or drag the bob), gravity, damping | angle (exact vs small-angle), energy |
 | Mass on a Spring | mass, k, damping, start position (or drag), driving force | position, energy |
 | 1D Collisions | masses, velocities, restitution, preset scenarios, walls | momentum, kinetic energy |
 | Orbital Motion | distance, launch speed and direction, planet mass | distance, energy |
 | Wave Interference | wavelength, separation, phase, frequency, wave or intensity view | displacement at a draggable probe |
+
+## AI interpretation
+
+On the Rocket Launch page, students write a formula (for example `dv = ve * ln(m0 / mf)`), describe what every symbol means (required), and fill in values themselves or from the simulator (↺). The app evaluates it offline, shows the worked steps, and tells them when the result matches a simulator value.
+
+**Ask the AI to interpret** sends the formula, the student's symbol descriptions, the values and the simulator context to Claude (`claude-opus-5-5`). The AI explains what was calculated, checks the meanings and units, and answers in the student's language. It uses the person's own Anthropic API key, entered under *AI settings*, and saves it only on the device. This feature needs internet; the rest of the app works offline. The code is in `src/ai/interpret.js`, which the build bundles into `www/js/ai.js`.
 
 ## Building
 
